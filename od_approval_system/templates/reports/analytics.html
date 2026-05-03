@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block page_title %}Approval Analytics{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-4">
+    <div class="card soft-card h-100"><div class="card-body"><h3>Status Split</h3>{% for row in status_counts %}<div class="mb-3"><div class="d-flex justify-content-between"><span>{{ row.status }}</span><strong>{{ row.total }}</strong></div><div class="mini-chart"><span style="width:{% widthratio row.total total 100 %}%"></span></div></div>{% empty %}<p>No data.</p>{% endfor %}</div></div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card soft-card h-100"><div class="card-body"><h3>Department Load</h3>{% for row in dept_counts %}<div class="mb-3"><div class="d-flex justify-content-between"><span>{{ row.student__department__code }}</span><strong>{{ row.total }}</strong></div><div class="mini-chart"><span style="width:{% widthratio row.total total 100 %}%"></span></div></div>{% empty %}<p>No data.</p>{% endfor %}</div></div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card soft-card h-100"><div class="card-body"><h3>OD Types</h3>{% for row in type_counts %}<div class="mb-3"><div class="d-flex justify-content-between"><span>{{ row.od_type }}</span><strong>{{ row.total }}</strong></div><div class="mini-chart"><span style="width:{% widthratio row.total total 100 %}%"></span></div></div>{% empty %}<p>No data.</p>{% endfor %}</div></div>
+  </div>
+</div>
+<div class="card soft-card mt-4"><div class="card-body"><h3>Approval Delay Analytics</h3><div class="table-responsive"><table class="table table-hover"><thead><tr><th>Roll</th><th>Event</th><th>Faculty Delay</th><th>Dean Delay</th><th>Status</th></tr></thead><tbody>{% for item in delay_items %}<tr><td>{{ item.obj.student.roll_number }}</td><td>{{ item.obj.event_title }}</td><td>{% if item.faculty_delay %}{{ item.faculty_delay|floatformat:1 }} hrs{% else %}-{% endif %}</td><td>{% if item.dean_delay %}{{ item.dean_delay|floatformat:1 }} hrs{% else %}-{% endif %}</td><td>{% include 'includes/status_badge.html' with status=item.obj.status %}</td></tr>{% empty %}<tr><td colspan="5">No approval delay data yet.</td></tr>{% endfor %}</tbody></table></div></div></div>
+{% endblock %}

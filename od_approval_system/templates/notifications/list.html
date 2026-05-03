@@ -1,0 +1,3 @@
+{% extends 'base.html' %}
+{% block page_title %}Notifications{% endblock %}
+{% block content %}<div class="card soft-card"><div class="card-body"><h2>Notifications</h2><div class="list-group">{% for n in notifications %}<a class="list-group-item list-group-item-action {% if not n.is_read %}active-notification{% endif %}" href="{% url 'notifications:mark_read' n.pk %}"><div class="d-flex justify-content-between"><strong>{{ n.title }}</strong><small>{{ n.created_at }}</small></div><p class="mb-0">{{ n.message }}</p></a>{% empty %}<p>No notifications.</p>{% endfor %}</div></div></div>{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block page_title %}Login{% endblock %}
+{% block content %}
+<div class="auth-card mx-auto">
+  <h2 class="mb-3">Login to OD System</h2>
+  {% include 'includes/form_errors.html' %}
+  <form method="post" class="needs-loader">
+    {% csrf_token %}
+    <div class="mb-3">{{ form.email.label_tag }} {{ form.email }}</div>
+    <div class="mb-3">{{ form.password.label_tag }} {{ form.password }}</div>
+    <button class="btn btn-primary w-100" type="submit">Login</button>
+  </form>
+  <p class="mt-3 small text-muted">Student access is enabled only after Faculty/Dean/Admin uploads your official credentials. <a href="{% url 'accounts:register_student' %}">Learn more</a></p>
+</div>
+{% endblock %}

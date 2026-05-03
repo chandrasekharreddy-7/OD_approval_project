@@ -1,0 +1,3 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ action_label }}{% endblock %}
+{% block content %}<div class="card soft-card"><div class="card-body"><h2>{{ action_label }}: {{ od_request.event_title }}</h2>{% include 'includes/form_errors.html' %}<form method="post">{% csrf_token %}<div class="mb-3"><label class="form-label">Remarks</label>{{ form.remarks }}</div><button class="btn btn-primary">{{ action_label }}</button> <a class="btn btn-secondary" href="{% url 'dean:request_detail' od_request.pk %}">Back</a></form></div></div>{% endblock %}

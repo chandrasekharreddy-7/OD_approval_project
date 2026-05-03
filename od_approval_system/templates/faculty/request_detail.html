@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block page_title %}Faculty Review{% endblock %}
+{% block content %}
+<div class="card soft-card"><div class="card-body"><div class="d-flex justify-content-between"><h2>{{ od_request.event_title }}</h2>{% include 'includes/status_badge.html' with status=od_request.status %}</div>
+<div class="row g-2"><div class="col-md-4"><strong>Student:</strong> {{ od_request.student.user.get_full_name }}</div><div class="col-md-4"><strong>Roll:</strong> {{ od_request.student.roll_number }}</div><div class="col-md-4"><strong>Dept:</strong> {{ od_request.student.department.name }}</div><div class="col-md-4"><strong>Dates:</strong> {{ od_request.from_date }} to {{ od_request.to_date }}</div><div class="col-md-4"><strong>Place:</strong> {{ od_request.place }}</div><div class="col-md-4"><strong>Type:</strong> {{ od_request.get_od_type_display }}</div><div class="col-12"><strong>Reason:</strong><p>{{ od_request.reason }}</p></div></div>
+<h4>Proof Documents</h4><ul>{% for d in od_request.uploaded_documents.all %}<li><a href="{% url 'od:download_document' d.pk %}" target="_blank">{{ d.original_filename }}</a></li>{% empty %}<li>No proof uploaded.</li>{% endfor %}</ul>
+<h4>Student OD History</h4><a class="btn btn-outline-secondary btn-sm" href="{% url 'faculty:student_history' od_request.student.pk %}">View full history</a>
+{% if od_request.status == 'PENDING_FACULTY_REVIEW' %}<hr><div class="d-flex gap-2"><a class="btn btn-success" href="{% url 'faculty:approve_request' od_request.pk %}">Approve & Forward</a><a class="btn btn-danger" href="{% url 'faculty:reject_request' od_request.pk %}">Reject</a></div>{% endif %}
+<h4 class="mt-4">Remarks History</h4>{% for a in od_request.approvals.all %}<div class="timeline-item"><strong>{{ a.get_status_display }}</strong> · {{ a.role }} · {{ a.created_at }}<p>{{ a.remarks }}</p></div>{% empty %}<p>No remarks.</p>{% endfor %}
+</div></div>
+{% endblock %}

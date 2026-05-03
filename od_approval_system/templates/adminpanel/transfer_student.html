@@ -1,0 +1,3 @@
+{% extends 'base.html' %}
+{% block page_title %}Transfer Student{% endblock %}
+{% block content %}<div class="card soft-card"><div class="card-body"><h2>Transfer {{ student.roll_number }}</h2><p class="text-muted">Update school, department, mentor, year, section, and semester mapping.</p><form method="post" class="row g-3 needs-loader">{% csrf_token %}{% for field in form %}<div class="col-md-4"><label class="form-label">{{ field.label }}</label>{{ field }}</div>{% endfor %}<div class="col-12"><button class="btn btn-primary">Save Transfer</button><a class="btn btn-outline-secondary" href="{% url 'adminpanel:manage_students' %}">Cancel</a></div></form></div></div>{% endblock %}

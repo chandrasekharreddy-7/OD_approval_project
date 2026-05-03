@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_title %}Import Student Credentials{% include 'includes/import_preview.html' %}
+{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card soft-card page-card">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <div>
+            <span class="eyebrow">Admin Upload</span>
+            <h2 class="mb-1">Authorize student logins</h2>
+            <p class="text-muted mb-0">Students can login only after their email, roll number, and password are uploaded here.</p>
+          </div>
+          <span class="badge text-bg-primary rounded-pill">CSV / XLSX</span>
+        </div>
+        {% include 'includes/form_errors.html' %}
+        <form method="post" enctype="multipart/form-data" class="needs-loader upload-zone p-4">
+          {% csrf_token %}
+          <label class="form-label fw-bold">Upload student credentials file</label>
+          {{ form.file }}
+          <div class="form-text mt-2">Maximum 5 MB. Passwords are hashed immediately and never stored as plain text.</div>
+          <div class="d-flex gap-2 mt-3"><button class="btn btn-outline-primary" name="preview" value="1" type="submit">Preview & Validate</button><button class="btn btn-primary" name="import" value="1" type="submit">Upload & Authorize Students</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card soft-card page-card">
+      <div class="card-body p-4">
+        <h4>Required columns</h4>
+        <div class="table-responsive"><table class="table table-sm align-middle"><tbody>
+          <tr><th>email</th><td>Student login email</td></tr>
+          <tr><th>roll_number</th><td>Unique university roll number</td></tr>
+          <tr><th>password</th><td>Initial login password, minimum 8 chars</td></tr>
+          <tr><th>school_code</th><td>Required for admin upload</td></tr>
+          <tr><th>department_code</th><td>Required for admin/dean upload</td></tr>
+          <tr><th>year, section, semester</th><td>Student academic details</td></tr>
+          <tr><th>mentor_email</th><td>Optional faculty mentor email</td></tr>
+        </tbody></table></div>
+        <a class="btn btn-outline-primary w-100" href="{% static 'files/student_credentials_template.csv' %}">Download template</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% include 'includes/import_preview.html' %}
+{% endblock %}

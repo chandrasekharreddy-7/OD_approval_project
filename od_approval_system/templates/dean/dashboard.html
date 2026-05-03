@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block page_title %}Dean Dashboard{% endblock %}
+{% block content %}
+<div class="row g-3">{% for key,value in stats.items %}<div class="col-md-3"><div class="stat-card"><span>{{ key|title }}</span><strong>{{ value }}</strong></div></div>{% endfor %}</div>
+<div class="alert alert-info mt-3">Average approval delay: {{ avg_delay|default:'Not enough data yet' }}</div>
+<div class="card soft-card mt-3"><div class="card-body"><div class="d-flex flex-wrap gap-2 justify-content-between align-items-center"><h3>Requests in Your School</h3><div class="d-flex gap-2"><a class="btn btn-outline-primary" href="{% url 'dean:upload_students' %}">Upload Students</a><a class="btn btn-primary" href="{% url 'dean:approval_requests' %}">Open Approval Queue</a></div></div><table class="table"><thead><tr><th>Student</th><th>Event</th><th>Status</th><th></th></tr></thead><tbody>{% for r in recent_requests %}<tr><td>{{ r.student.roll_number }}</td><td>{{ r.event_title }}</td><td>{% include 'includes/status_badge.html' with status=r.status %}</td><td><a class="btn btn-sm btn-outline-primary" href="{% url 'dean:request_detail' r.pk %}">View</a></td></tr>{% empty %}<tr><td colspan="4">No requests.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

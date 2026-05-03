@@ -1,0 +1,11 @@
+{
+  "name": "SAI University OD Approval System",
+  "short_name": "SAI OD",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0a1f5c",
+  "icons": [
+    {"src": "/static/images/sai_logo.png", "sizes": "251x157", "type": "image/png"}
+  ]
+}

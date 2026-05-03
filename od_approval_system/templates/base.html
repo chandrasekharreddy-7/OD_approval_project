@@ -1,0 +1,106 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Sai University OD Approval System{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="manifest" href="{% static 'manifest.json' %}">
+  <meta name="theme-color" content="#0a1f5c">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="app-shell">
+  {% if user.is_authenticated %}
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="{% url 'accounts:redirect' %}">
+      <img src="{% static 'images/sai_logo.png' %}" alt="Sai University logo">
+      <span><strong>SAI</strong><small>OD System</small></span>
+    </a>
+    <nav class="nav flex-column gap-1">
+      {% if user.role == 'STUDENT' %}
+      <a class="nav-link" href="{% url 'students:dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+      <a class="nav-link" href="{% url 'students:apply_od' %}"><i class="bi bi-send-check"></i> Apply OD</a>
+      <a class="nav-link" href="{% url 'students:my_requests' %}"><i class="bi bi-clock-history"></i> My OD Requests</a>
+      {% elif user.role == 'FACULTY' %}
+      <a class="nav-link" href="{% url 'faculty:dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+      <a class="nav-link" href="{% url 'faculty:pending_requests' %}"><i class="bi bi-inboxes"></i> Student Requests</a>
+      <a class="nav-link" href="{% url 'faculty:upload_students' %}"><i class="bi bi-cloud-arrow-up"></i> Upload Students</a>
+      {% elif user.role == 'DEAN' %}
+      <a class="nav-link" href="{% url 'dean:dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+      <a class="nav-link" href="{% url 'dean:approval_requests' %}"><i class="bi bi-shield-check"></i> Dean Approvals</a>
+      <a class="nav-link" href="{% url 'dean:manage_faculty' %}"><i class="bi bi-people"></i> Manage Faculty</a>
+      <a class="nav-link" href="{% url 'dean:manage_students' %}"><i class="bi bi-person-lines-fill"></i> Manage Students</a>
+      <a class="nav-link" href="{% url 'dean:upload_students' %}"><i class="bi bi-cloud-arrow-up"></i> Upload Students</a>
+      <a class="nav-link" href="{% url 'dean:rules' %}"><i class="bi bi-sliders"></i> OD Rules</a>
+      <a class="nav-link" href="{% url 'reports:index' %}"><i class="bi bi-file-earmark-bar-graph"></i> Reports</a>
+      <a class="nav-link" href="{% url 'reports:analytics' %}"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
+      {% elif user.role == 'ADMIN' or user.is_superuser %}
+      <a class="nav-link" href="{% url 'adminpanel:dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+      <a class="nav-link" href="{% url 'adminpanel:manage_users' %}"><i class="bi bi-person-gear"></i> Manage Users</a>
+      <a class="nav-link" href="{% url 'adminpanel:manage_students' %}"><i class="bi bi-person-lines-fill"></i> Manage Students</a>
+      <a class="nav-link" href="{% url 'adminpanel:manage_deans' %}"><i class="bi bi-mortarboard"></i> Manage Deans</a>
+      <a class="nav-link" href="{% url 'adminpanel:manage_faculty' %}"><i class="bi bi-people"></i> Manage Faculty</a>
+      <a class="nav-link" href="{% url 'adminpanel:import_students' %}"><i class="bi bi-cloud-arrow-up"></i> Import Students</a>
+      <a class="nav-link" href="{% url 'adminpanel:schools_departments' %}"><i class="bi bi-diagram-3"></i> Schools & Departments</a>
+      <a class="nav-link" href="{% url 'adminpanel:od_categories' %}"><i class="bi bi-tags"></i> OD Categories</a>
+      <a class="nav-link" href="{% url 'adminpanel:od_rules' %}"><i class="bi bi-sliders"></i> System Rules</a>
+      <a class="nav-link" href="{% url 'adminpanel:all_od_requests' %}"><i class="bi bi-folder2-open"></i> All OD Requests</a>
+      <a class="nav-link" href="{% url 'reports:index' %}"><i class="bi bi-file-earmark-bar-graph"></i> Reports</a>
+      <a class="nav-link" href="{% url 'reports:analytics' %}"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
+      <a class="nav-link" href="{% url 'adminpanel:audit_logs' %}"><i class="bi bi-journal-text"></i> Audit Logs</a>
+      {% endif %}
+      <a class="nav-link" href="{% url 'reports:calendar' %}"><i class="bi bi-calendar3"></i> OD Calendar</a>
+      <a class="nav-link" href="{% url 'notifications:list' %}"><i class="bi bi-bell"></i> Notifications <span class="badge bg-warning text-dark">{{ unread_notification_count }}</span></a>
+      <a class="nav-link" href="{% url 'accounts:profile' %}"><i class="bi bi-person-circle"></i> Profile</a>
+      <a class="nav-link text-danger" href="{% url 'accounts:logout' %}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </nav>
+  </aside>
+  {% endif %}
+  <main class="main-content {% if not user.is_authenticated %}public-main{% endif %}">
+    <header class="topbar">
+      {% if user.is_authenticated %}<button class="btn btn-light d-lg-none" id="sidebarToggle" type="button"><i class="bi bi-list"></i></button>{% endif %}
+      <div>
+        <h1>{% block page_title %}University OD Approval System{% endblock %}</h1>
+        {% if user.is_authenticated %}<p>{{ user.get_full_name|default:user.email }} · {{ user.get_role_display }}</p>{% endif %}
+      </div>
+    </header>
+    <section class="container-fluid py-4 page-transition">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+</div>
+
+{% if user.is_authenticated %}
+<button class="ai-chat-launcher" id="aiChatLauncher" type="button" title="Ask OD Assistant"><i class="bi bi-robot"></i></button>
+<section class="ai-chat-panel" id="aiChatPanel" aria-label="OD AI Assistant">
+  <div class="ai-chat-header">
+    <div><strong>SAI OD Assistant</strong><small>OpenRouter-powered help</small></div>
+    <button class="btn btn-sm btn-light" id="aiChatClose" type="button"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div class="ai-chat-messages" id="aiChatMessages">
+    <div class="ai-msg bot">Hi! Ask me about OD application, approvals, reports, QR verification, or your dashboard actions.</div>
+  </div>
+  <form class="ai-chat-form" id="aiChatForm">
+    <input id="aiChatInput" maxlength="2000" placeholder="Ask about OD rules or status..." autocomplete="off">
+    <button type="submit"><i class="bi bi-send"></i></button>
+  </form>
+</section>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<div id="loadingOverlay" class="loading-overlay"><div class="spinner-border text-primary" role="status"></div><span>Processing...</span></div>
+<script src="{% static 'js/app.js' %}"></script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('{% static ',js/service-worker.js,' %}').catch(()=>{}));}</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+{% if status == 'DEAN_APPROVED' %}<span class="badge rounded-pill bg-success">Dean Approved</span>
+{% elif status == 'FACULTY_REJECTED' or status == 'DEAN_REJECTED' %}<span class="badge rounded-pill bg-danger">Rejected</span>
+{% elif status == 'CANCELLED' %}<span class="badge rounded-pill bg-secondary">Cancelled</span>
+{% elif status == 'FORWARDED_TO_DEAN' %}<span class="badge rounded-pill bg-primary">Forwarded to Dean</span>
+{% else %}<span class="badge rounded-pill bg-warning text-dark">Pending Faculty Review</span>{% endif %}

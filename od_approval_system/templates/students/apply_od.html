@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block page_title %}Apply OD{% endblock %}
+{% block content %}
+<div class="card soft-card"><div class="card-body">
+<h2>Apply for On-Duty Permission</h2>
+{% include 'includes/form_errors.html' %}
+<form method="post" enctype="multipart/form-data" class="row g-3 needs-loader">
+{% csrf_token %}
+{% for field in form %}<div class="col-md-{% if field.name == 'reason' or field.name == 'organizer_details' %}12{% else %}6{% endif %}"><label class="form-label">{{ field.label }}</label>{{ field }}</div>{% endfor %}
+<div class="col-12"><button class="btn btn-primary">Submit OD Request</button></div>
+</form>
+</div></div>
+{% endblock %}
