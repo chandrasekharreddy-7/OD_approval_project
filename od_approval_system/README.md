@@ -439,3 +439,6 @@ python manage.py makemigrations --check --dry-run
 ```
 
 Template URL reverse checks and template load checks were also performed to catch broken URL names and template syntax problems.
+
+# OD_approval_project
+this is just a demo project, we can deploy it after demo verification is sucessfull.
