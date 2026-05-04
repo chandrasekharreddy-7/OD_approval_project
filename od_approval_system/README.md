@@ -1,3 +1,7 @@
+# There were no collabrators.
+  Name : B. Chandra Sekhar Reddy
+  PRN  : 250200299
+
 # University OD Approval System
 
 A complete Django + PostgreSQL website for Sai University On-Duty (OD) permission workflow.
